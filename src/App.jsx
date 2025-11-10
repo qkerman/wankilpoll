@@ -22,7 +22,10 @@ function App() {
   useEffect(() => {
     const fetchSheet = async () => {
       try {
-        const res = await fetch(SHEET_URL);
+        const res = await fetch(SHEET_URL, {
+          cache: "no-cache",
+          Pragma: "no-cache",
+        });
         const text = await res.text();
         const rows = text
           .trim()
