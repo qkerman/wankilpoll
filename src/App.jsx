@@ -1,0 +1,148 @@
+import { useEffect, useState } from "react";
+
+import "./App.css";
+
+function App() {
+  const SHEET_URL =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vTtKOZ_DXB5CZYdwNtCvIw6_4Cnf76mIvWuo9W6kqKkV4BietcCOd5X3wweWiWR0ziLJl65kihnVg9c/pub?output=csv";
+
+  // No API key needed for Wikipedia
+
+  const [topGames, setTopGames] = useState([]);
+  const imageCache = new Map();
+  const knownImages = {
+    Roblox:
+      "https://logos-world.net/wp-content/uploads/2020/11/Roblox-Logo.png",
+    Phasmophobia:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Phasmophobia_cover.jpg/256px-Phasmophobia_cover.jpg",
+    "Lost Ark":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Lost_Ark_cover_art.jpg/256px-Lost_Ark_cover_art.jpg",
+  };
+
+  useEffect(() => {
+    const fetchSheet = async () => {
+      try {
+        const res = await fetch(SHEET_URL);
+        const text = await res.text();
+        const rows = text
+          .trim()
+          .split("\n")
+          .map((row) => row.split(",").map((cell) => cell.trim()));
+        const headers = rows[0];
+        const gameIndex = 1; // "Choisir un jeu" is the second column
+        const voteCounts = {};
+        for (let i = 1; i < rows.length; i++) {
+          const game = rows[i][gameIndex];
+          voteCounts[game] = (voteCounts[game] || 0) + 1;
+        }
+        const sortedGames = Object.entries(voteCounts)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 10)
+          .map(([name, votes]) => ({ name, votes }));
+
+        // Fetch images for each game from Wikipedia
+        const gamesWithImages = await Promise.all(
+          sortedGames.map(async (game) => {
+            if (imageCache.has(game.name)) {
+              return { ...game, image: imageCache.get(game.name) };
+            }
+            try {
+              let image = null;
+              const titles = [
+                game.name,
+                `${game.name} (video game)`,
+                `${game.name} (game)`,
+              ];
+              for (const title of titles) {
+                const wikiRes = await fetch(
+                  `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(
+                    title
+                  )}`,
+                  {
+                    headers: {
+                      "User-Agent":
+                        "WankilPoll/1.0 (https://example.com; contact@example.com)",
+                    },
+                  }
+                );
+                if (wikiRes.ok) {
+                  const wikiData = await wikiRes.json();
+                  image = wikiData.thumbnail?.source || null;
+                  if (image) break;
+                }
+              }
+              // Fallback to known images
+              if (!image && knownImages[game.name]) {
+                image = knownImages[game.name];
+              }
+              imageCache.set(game.name, image);
+              return { ...game, image };
+            } catch (err) {
+              console.error(`Error fetching image for ${game.name}:`, err);
+              imageCache.set(game.name, null);
+              return { ...game, image: null };
+            }
+          })
+        );
+
+        setTopGames(gamesWithImages);
+      } catch (err) {
+        console.error("Error fetching sheet:", err);
+      }
+    };
+
+    fetchSheet(); // initial fetch
+    const interval = setInterval(fetchSheet, 5000); // poll every 5s
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="app">
+      {topGames.length >= 3 && (
+        <div className="podium">
+          {/* 2nd place */}
+          <div className="podium-item second">
+            <div className="rank">2</div>
+            <img src={topGames[1]?.image || ""} alt={topGames[1]?.name} />
+            <div className="game-name" title={topGames[1]?.name}>
+              {topGames[1]?.name}
+            </div>
+            <div className="votes">{topGames[1]?.votes} votes</div>
+          </div>
+          {/* 1st place */}
+          <div className="podium-item first">
+            <div className="rank">1</div>
+            <img src={topGames[0]?.image || ""} alt={topGames[0]?.name} />
+            <div className="game-name" title={topGames[0]?.name}>
+              {topGames[0]?.name}
+            </div>
+            <div className="votes">{topGames[0]?.votes} votes</div>
+          </div>
+          {/* 3rd place */}
+          <div className="podium-item third">
+            <div className="rank">3</div>
+            <img src={topGames[2]?.image || ""} alt={topGames[2]?.name} />
+            <div className="game-name" title={topGames[2]?.name}>
+              {topGames[2]?.name}
+            </div>
+            <div className="votes">{topGames[2]?.votes} votes</div>
+          </div>
+        </div>
+      )}
+      <div className="others">
+        {topGames.slice(3).map((game, i) => (
+          <div className="game-card" key={i + 4}>
+            <div className="rank">{i + 4}</div>
+            <img src={game.image || ""} alt={game.name} />
+            <div className="game-name" title={game.name}>
+              {game.name}
+            </div>
+            <div className="votes">{game.votes} votes</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default App;

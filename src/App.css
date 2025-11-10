@@ -1,0 +1,224 @@
+#root {
+  width: 100%;
+  height: 100vh;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.app {
+  max-width: 600px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.app h1 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+/* Podium Section */
+.podium {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.podium-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  border: 2px solid #e0e0e0;
+  flex: 1;
+  max-width: 180px;
+  height: 220px;
+}
+
+.podium-item:hover {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.podium-item.first {
+  order: 2;
+  height: 240px;
+}
+
+.podium-item.second {
+  order: 1;
+}
+
+.podium-item.third {
+  order: 3;
+}
+
+.podium-item img {
+  width: 100%;
+  height: 120px;
+  border-radius: 4px;
+  object-fit: contain;
+  margin-bottom: 0.4rem;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.podium-item.first img {
+  height: 140px;
+}
+
+.podium-item.second img {
+  height: 100px;
+}
+
+.podium-item.third img {
+  height: 100px;
+}
+
+.rank {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #666;
+  margin-bottom: 0.15rem;
+  text-align: center;
+}
+
+.podium-item.first .rank {
+  font-size: 1.1rem;
+}
+
+.game-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 0.15rem;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.podium-item.first .game-name {
+  font-size: 0.9rem;
+}
+
+.votes {
+  font-size: 0.65rem;
+  color: #888;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Others Section */
+.others {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 0.4rem;
+  width: 100%;
+  align-items: start;
+  overflow: hidden;
+}
+
+.game-card {
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 0.4rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  height: 110px;
+}
+
+.game-card:hover {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+}
+
+.game-card img {
+  width: 100%;
+  height: 50px;
+  border-radius: 4px;
+  object-fit: contain;
+  margin-bottom: 0.3rem;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.game-card .rank {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #666;
+  margin-bottom: 0.1rem;
+  text-align: center;
+}
+
+.game-card .game-name {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  line-height: 1.1;
+  margin-bottom: 0.1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
+}
+
+.game-card .votes {
+  font-size: 0.55rem;
+  color: #888;
+  text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .app h1 {
+    font-size: 1.25rem;
+  }
+  
+  .podium-item.first,
+  .podium-item.second,
+  .podium-item.third {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .game-card {
+    width: 100%;
+    max-width: 100%;
+  }
+}
