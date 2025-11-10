@@ -22,9 +22,10 @@ function App() {
   useEffect(() => {
     const fetchSheet = async () => {
       try {
-        const res = await fetch(SHEET_URL, {
-          cache: "no-cache",
-          Pragma: "no-cache",
+        // Add timestamp to bust cache
+        const cacheBuster = `${SHEET_URL}&_=${Date.now()}`;
+        const res = await fetch(cacheBuster, {
+          cache: "no-store",
         });
         const text = await res.text();
         const rows = text
@@ -101,7 +102,7 @@ function App() {
 
   return (
     <div className="app">
-      <h1>updated</h1>
+      <h1>updated2</h1>
       {topGames.length >= 3 && (
         <div className="podium">
           {/* 2nd place */}
