@@ -101,6 +101,7 @@ function App() {
 
   return (
     <div className="app">
+      <h1>updated</h1>
       {topGames.length >= 3 && (
         <div className="podium">
           {/* 2nd place */}
