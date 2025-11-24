@@ -10,9 +10,29 @@ function App() {
 
   const [topGames, setTopGames] = useState([]);
   const [loading, setLoading] = useState(true);
-  const imageCache = new Map();
   const DEFAULT_IMAGE =
     "https://upload.wikimedia.org/wikipedia/commons/f/f8/Question_mark_alternate.svg";
+
+  // Load image cache from localStorage
+  const loadImageCache = () => {
+    try {
+      const cached = localStorage.getItem("wankilpoll_images");
+      return cached ? new Map(JSON.parse(cached)) : new Map();
+    } catch {
+      return new Map();
+    }
+  };
+
+  // Save image cache to localStorage
+  const saveImageCache = (cache) => {
+    try {
+      localStorage.setItem("wankilpoll_images", JSON.stringify([...cache]));
+    } catch (err) {
+      console.error("Failed to save cache:", err);
+    }
+  };
+
+  const [imageCache, setImageCache] = useState(loadImageCache);
   const knownImages = {
     Roblox:
       "https://logos-world.net/wp-content/uploads/2020/11/Roblox-Logo.png",
@@ -53,10 +73,11 @@ function App() {
           .map(([name, votes]) => ({ name, votes }));
 
         // Fetch images for each game from Wikipedia
+        const newCache = new Map(imageCache);
         const gamesWithImages = await Promise.all(
           sortedGames.map(async (game) => {
-            if (imageCache.has(game.name)) {
-              return { ...game, image: imageCache.get(game.name) };
+            if (newCache.has(game.name)) {
+              return { ...game, image: newCache.get(game.name) };
             }
             try {
               let image = null;
@@ -106,16 +127,19 @@ function App() {
               if (!image) {
                 image = DEFAULT_IMAGE;
               }
-              imageCache.set(game.name, image);
+              newCache.set(game.name, image);
               return { ...game, image };
             } catch (err) {
               //console.error(`Error fetching image for ${game.name}:`, err);
-              imageCache.set(game.name, DEFAULT_IMAGE);
+              newCache.set(game.name, DEFAULT_IMAGE);
               return { ...game, image: DEFAULT_IMAGE };
             }
           })
         );
 
+        // Save updated cache to localStorage
+        setImageCache(newCache);
+        saveImageCache(newCache);
         setTopGames(gamesWithImages);
         setLoading(false);
       } catch (err) {
