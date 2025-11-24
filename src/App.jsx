@@ -76,6 +76,12 @@ function App() {
         const newCache = new Map(imageCache);
         const gamesWithImages = await Promise.all(
           sortedGames.map(async (game) => {
+            // Priority 1: Check knownImages first (allows manual override)
+            if (knownImages[game.name]) {
+              newCache.set(game.name, knownImages[game.name]);
+              return { ...game, image: knownImages[game.name] };
+            }
+            // Priority 2: Check cache
             if (newCache.has(game.name)) {
               return { ...game, image: newCache.get(game.name) };
             }
