@@ -44,6 +44,10 @@ function App() {
       "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1732430/80b8baec5e77c8338c3931182b631fbde5c5a083/header.jpg?t=1760704191",
     Mimesis:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKLSqcFrpF_OJqPExclC2stRGJTKo1jnb3F-CyIYklHktOuIV2xajJibU_mh_cCApnc0jeoU_uH3WBqSmvKKiR8_sJ5ZGxe0pi-xn0q7F9HQ&s=10",
+    "Garry’s mod":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Garry%27s_Mod_logo.svg/250px-Garry%27s_Mod_logo.svg.png",
+    "Golf It":
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-yoEXohkVWo2vQ5h9VnON7WMB7k-udqdelRZQb5qDV6tX5TR7KAU-tmUbHGGmO87ohyw&usqp=CAU",
   };
 
   useEffect(() => {
