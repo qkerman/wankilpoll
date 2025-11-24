@@ -125,55 +125,71 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
+  // Create placeholders if there are less than 10 games
+  const displayGames = [...topGames];
+  while (displayGames.length < 10) {
+    displayGames.push({
+      name: "En attente...",
+      votes: 0,
+      image: DEFAULT_IMAGE,
+      isPlaceholder: true,
+    });
+  }
+
   return (
     <div className="app">
       {loading && topGames.length === 0 ? (
         <div className="loading">Chargement...</div>
       ) : (
         <>
-          {topGames.length >= 3 && (
+          {displayGames.length >= 3 && (
             <div className="podium">
               {/* 2nd place */}
               <div className="podium-item second">
                 <div className="rank">2</div>
                 <img
-                  src={topGames[1]?.image || DEFAULT_IMAGE}
-                  alt={topGames[1]?.name}
+                  src={displayGames[1]?.image || DEFAULT_IMAGE}
+                  alt={displayGames[1]?.name}
                 />
-                <div className="game-name" title={topGames[1]?.name}>
-                  {topGames[1]?.name}
+                <div className="game-name" title={displayGames[1]?.name}>
+                  {displayGames[1]?.name}
                 </div>
-                <div className="votes">{topGames[1]?.votes} votes</div>
+                <div className="votes">{displayGames[1]?.votes} votes</div>
               </div>
               {/* 1st place */}
               <div className="podium-item first">
                 <div className="rank">1</div>
                 <img
-                  src={topGames[0]?.image || DEFAULT_IMAGE}
-                  alt={topGames[0]?.name}
+                  src={displayGames[0]?.image || DEFAULT_IMAGE}
+                  alt={displayGames[0]?.name}
                 />
-                <div className="game-name" title={topGames[0]?.name}>
-                  {topGames[0]?.name}
+                <div className="game-name" title={displayGames[0]?.name}>
+                  {displayGames[0]?.name}
                 </div>
-                <div className="votes">{topGames[0]?.votes} votes</div>
+                <div className="votes">{displayGames[0]?.votes} votes</div>
               </div>
               {/* 3rd place */}
               <div className="podium-item third">
                 <div className="rank">3</div>
                 <img
-                  src={topGames[2]?.image || DEFAULT_IMAGE}
-                  alt={topGames[2]?.name}
+                  src={displayGames[2]?.image || DEFAULT_IMAGE}
+                  alt={displayGames[2]?.name}
                 />
-                <div className="game-name" title={topGames[2]?.name}>
-                  {topGames[2]?.name}
+                <div className="game-name" title={displayGames[2]?.name}>
+                  {displayGames[2]?.name}
                 </div>
-                <div className="votes">{topGames[2]?.votes} votes</div>
+                <div className="votes">{displayGames[2]?.votes} votes</div>
               </div>
             </div>
           )}
           <div className="others">
-            {topGames.slice(3).map((game, i) => (
-              <div className="game-card" key={i + 4}>
+            {displayGames.slice(3).map((game, i) => (
+              <div
+                className={`game-card ${
+                  game.isPlaceholder ? "placeholder" : ""
+                }`}
+                key={i + 4}
+              >
                 <div className="rank">{i + 4}</div>
                 <img src={game.image || DEFAULT_IMAGE} alt={game.name} />
                 <div className="game-name" title={game.name}>
