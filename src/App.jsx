@@ -18,8 +18,12 @@ function App() {
       "https://logos-world.net/wp-content/uploads/2020/11/Roblox-Logo.png",
     Phasmophobia:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Phasmophobia_cover.jpg/256px-Phasmophobia_cover.jpg",
-    "Lost Ark":
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Lost_Ark_cover_art.jpg/256px-Lost_Ark_cover_art.jpg",
+    Misery:
+      "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2119830/f4aa2f3b4b352f7f373026fe592d32eef2c72fce/header.jpg?t=1763600148",
+    "Neighbors Suburban Warfare":
+      "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1732430/80b8baec5e77c8338c3931182b631fbde5c5a083/header.jpg?t=1760704191",
+    Mimesis:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKLSqcFrpF_OJqPExclC2stRGJTKo1jnb3F-CyIYklHktOuIV2xajJibU_mh_cCApnc0jeoU_uH3WBqSmvKKiR8_sJ5ZGxe0pi-xn0q7F9HQ&s=10",
   };
 
   useEffect(() => {
