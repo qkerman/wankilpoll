@@ -4,11 +4,12 @@ import "./App.css";
 
 function App() {
   const SHEET_URL =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vTtKOZ_DXB5CZYdwNtCvIw6_4Cnf76mIvWuo9W6kqKkV4BietcCOd5X3wweWiWR0ziLJl65kihnVg9c/pub?output=csv";
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vR1sjZ3ZZG_8GT5opERibjljatJpO69kfm_X5kmFxr56upvuO2eXszrmlXQXwKd99cDjjKYiR0SFLyM/pub?output=csv";
 
   // No API key needed for Wikipedia
 
   const [topGames, setTopGames] = useState([]);
+  const [loading, setLoading] = useState(true);
   const imageCache = new Map();
   const knownImages = {
     Roblox:
@@ -22,6 +23,7 @@ function App() {
   useEffect(() => {
     const fetchSheet = async () => {
       try {
+        setLoading(true);
         // Add timestamp to bust cache
         const cacheBuster = `${SHEET_URL}&_=${Date.now()}`;
         const res = await fetch(cacheBuster, {
@@ -90,8 +92,10 @@ function App() {
         );
 
         setTopGames(gamesWithImages);
+        setLoading(false);
       } catch (err) {
         console.error("Error fetching sheet:", err);
+        setLoading(false);
       }
     };
 
@@ -102,50 +106,55 @@ function App() {
 
   return (
     <div className="app">
-      <h1>updated2</h1>
-      {topGames.length >= 3 && (
-        <div className="podium">
-          {/* 2nd place */}
-          <div className="podium-item second">
-            <div className="rank">2</div>
-            <img src={topGames[1]?.image || ""} alt={topGames[1]?.name} />
-            <div className="game-name" title={topGames[1]?.name}>
-              {topGames[1]?.name}
+      {loading && topGames.length === 0 ? (
+        <div className="loading">Chargement...</div>
+      ) : (
+        <>
+          {topGames.length >= 3 && (
+            <div className="podium">
+              {/* 2nd place */}
+              <div className="podium-item second">
+                <div className="rank">2</div>
+                <img src={topGames[1]?.image || ""} alt={topGames[1]?.name} />
+                <div className="game-name" title={topGames[1]?.name}>
+                  {topGames[1]?.name}
+                </div>
+                <div className="votes">{topGames[1]?.votes} votes</div>
+              </div>
+              {/* 1st place */}
+              <div className="podium-item first">
+                <div className="rank">1</div>
+                <img src={topGames[0]?.image || ""} alt={topGames[0]?.name} />
+                <div className="game-name" title={topGames[0]?.name}>
+                  {topGames[0]?.name}
+                </div>
+                <div className="votes">{topGames[0]?.votes} votes</div>
+              </div>
+              {/* 3rd place */}
+              <div className="podium-item third">
+                <div className="rank">3</div>
+                <img src={topGames[2]?.image || ""} alt={topGames[2]?.name} />
+                <div className="game-name" title={topGames[2]?.name}>
+                  {topGames[2]?.name}
+                </div>
+                <div className="votes">{topGames[2]?.votes} votes</div>
+              </div>
             </div>
-            <div className="votes">{topGames[1]?.votes} votes</div>
+          )}
+          <div className="others">
+            {topGames.slice(3).map((game, i) => (
+              <div className="game-card" key={i + 4}>
+                <div className="rank">{i + 4}</div>
+                <img src={game.image || ""} alt={game.name} />
+                <div className="game-name" title={game.name}>
+                  {game.name}
+                </div>
+                <div className="votes">{game.votes} votes</div>
+              </div>
+            ))}
           </div>
-          {/* 1st place */}
-          <div className="podium-item first">
-            <div className="rank">1</div>
-            <img src={topGames[0]?.image || ""} alt={topGames[0]?.name} />
-            <div className="game-name" title={topGames[0]?.name}>
-              {topGames[0]?.name}
-            </div>
-            <div className="votes">{topGames[0]?.votes} votes</div>
-          </div>
-          {/* 3rd place */}
-          <div className="podium-item third">
-            <div className="rank">3</div>
-            <img src={topGames[2]?.image || ""} alt={topGames[2]?.name} />
-            <div className="game-name" title={topGames[2]?.name}>
-              {topGames[2]?.name}
-            </div>
-            <div className="votes">{topGames[2]?.votes} votes</div>
-          </div>
-        </div>
+        </>
       )}
-      <div className="others">
-        {topGames.slice(3).map((game, i) => (
-          <div className="game-card" key={i + 4}>
-            <div className="rank">{i + 4}</div>
-            <img src={game.image || ""} alt={game.name} />
-            <div className="game-name" title={game.name}>
-              {game.name}
-            </div>
-            <div className="votes">{game.votes} votes</div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
