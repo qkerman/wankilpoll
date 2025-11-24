@@ -154,7 +154,10 @@ function App() {
                 <div className="game-name" title={displayGames[1]?.name}>
                   {displayGames[1]?.name}
                 </div>
-                <div className="votes">{displayGames[1]?.votes} votes</div>
+                <div className="votes">
+                  {displayGames[1]?.votes} vote
+                  {displayGames[1]?.votes > 1 ? "s" : ""}
+                </div>
               </div>
               {/* 1st place */}
               <div className="podium-item first">
@@ -166,7 +169,10 @@ function App() {
                 <div className="game-name" title={displayGames[0]?.name}>
                   {displayGames[0]?.name}
                 </div>
-                <div className="votes">{displayGames[0]?.votes} votes</div>
+                <div className="votes">
+                  {displayGames[0]?.votes} vote
+                  {displayGames[0]?.votes > 1 ? "s" : ""}
+                </div>
               </div>
               {/* 3rd place */}
               <div className="podium-item third">
@@ -178,7 +184,10 @@ function App() {
                 <div className="game-name" title={displayGames[2]?.name}>
                   {displayGames[2]?.name}
                 </div>
-                <div className="votes">{displayGames[2]?.votes} votes</div>
+                <div className="votes">
+                  {displayGames[2]?.votes} vote
+                  {displayGames[2]?.votes > 1 ? "s" : ""}
+                </div>
               </div>
             </div>
           )}
@@ -195,7 +204,7 @@ function App() {
                 <div className="game-name" title={game.name}>
                   {game.name}
                 </div>
-                <div className="votes">{game.votes} votes</div>
+                <div className="votes">{game.votes} vote</div>
               </div>
             ))}
           </div>
