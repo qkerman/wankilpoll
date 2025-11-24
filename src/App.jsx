@@ -125,7 +125,7 @@ function App() {
     };
 
     fetchSheet(); // initial fetch
-    const interval = setInterval(fetchSheet, 30000); // poll every 5s
+    const interval = setInterval(fetchSheet, 100000); // poll every 100s
     return () => clearInterval(interval);
   }, []);
 
