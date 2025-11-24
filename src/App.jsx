@@ -59,13 +59,33 @@ function App() {
         const rows = text
           .trim()
           .split("\n")
-          .map((row) => row.split(",").map((cell) => cell.trim()));
+          .map((row) => {
+            // Split by comma, but need to handle the quoted field with multiple answers
+            const match = row.match(/^[^,]*,\s*"([^"]*)"/);
+            if (match) {
+              // Extract timestamp and quoted games field
+              const timestamp = row.substring(0, row.indexOf(","));
+              const gamesField = match[1];
+              return [timestamp.trim(), gamesField];
+            }
+            // Fallback to simple split if no quotes found
+            return row.split(",").map((cell) => cell.trim());
+          });
         const headers = rows[0];
         const gameIndex = 1; // "Choisir un jeu" is the second column
         const voteCounts = {};
         for (let i = 1; i < rows.length; i++) {
-          const game = rows[i][gameIndex];
-          voteCounts[game] = (voteCounts[game] || 0) + 1;
+          const gamesField = rows[i][gameIndex];
+          if (gamesField) {
+            // Split by comma to handle multiple games in one response
+            const games = gamesField
+              .split(",")
+              .map((game) => game.trim())
+              .filter((game) => game);
+            games.forEach((game) => {
+              voteCounts[game] = (voteCounts[game] || 0) + 1;
+            });
+          }
         }
         const sortedGames = Object.entries(voteCounts)
           .sort((a, b) => b[1] - a[1])
